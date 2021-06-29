@@ -1,15 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { usePlacesWidget } from 'react-google-autocomplete';
+import axios from 'axios';
 
 export const Main: React.FC = () => {
+  const [petadoptions, setPetadoptions] = useState([]);
+  const [geoposition, setgeoposition] = useState({
+    lat: 0,
+    lng: 0,
+  });
+
   const { ref } = usePlacesWidget({
     apiKey: 'AIzaSyAs_LAuZVVqNTEdv765oUp6arI5Tjxs43s',
     onPlaceSelected: (place) => {
-      console.log(place.geometry.location.lat());
-      console.log(place.geometry.location.lng());
+      setgeoposition({
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      });
     },
   });
+
+  const find_adoptions = (geoposition) => {
+    const API_URL = `https://api.yelp.com/v3/businesses/search?term=pets&latitude=${geoposition.lat}&longitude=${geoposition.lng}&categories=petadoption`;
+    fetch(API_URL, {
+      method: 'get',
+      headers: {
+        authorization:
+          'Bearer RQmAJ375vK7UhAZ6NIeNRziREj9DGsKVr2_9E2rcrIQ-jHsjuGx09I7ObLjcRfhh_PH6ynVzv22Ac5tk9DIJDVOGCz5VgAYo_z7BpgzNMBhaoX1pa7tA2EnPXx3WYHYx',
+        Cookie: '__cfduid=db290300ecfe95ec1fe3bc92c388c3c991586618117',
+        'Access-Control-Allow-Origin': '*',
+      },
+      redirect: 'follow',
+    })
+      .then((res) => {
+        console.log('res: ', res);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log('result: ', result);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  useEffect(() => {
+    if (geoposition.lat !== 0) find_adoptions(geoposition);
+  }, [geoposition]);
 
   return (
     <div className='container mx-auto'>
@@ -32,7 +71,11 @@ export const Main: React.FC = () => {
           </div>
         </div>
 
-        <div className='col-span-9 bg-gray-200'>2</div>
+        <div className='col-span-9'>
+          {petadoptions.map((item, key) => {
+            return <div key={key}>aaa</div>;
+          })}
+        </div>
       </div>
     </div>
   );
