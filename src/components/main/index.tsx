@@ -24,12 +24,10 @@ export const Main: React.FC = () => {
     fetch(API_URL, {
       method: 'get',
       headers: {
+        'Access-Control-Allow-Origin': '*',
         authorization:
           'Bearer RQmAJ375vK7UhAZ6NIeNRziREj9DGsKVr2_9E2rcrIQ-jHsjuGx09I7ObLjcRfhh_PH6ynVzv22Ac5tk9DIJDVOGCz5VgAYo_z7BpgzNMBhaoX1pa7tA2EnPXx3WYHYx',
-        Cookie: '__cfduid=db290300ecfe95ec1fe3bc92c388c3c991586618117',
-        'Access-Control-Allow-Origin': '*',
       },
-      redirect: 'follow',
     })
       .then((res) => {
         console.log('res: ', res);
