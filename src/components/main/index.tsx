@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import axios from 'axios';
 
 export const Main: React.FC = () => {
   const [petadoptions, setPetadoptions] = useState([]);
@@ -34,7 +33,7 @@ export const Main: React.FC = () => {
     })
       .then((res) => {
         console.log('res: ', res);
-        return res.json();
+        setPetadoptions([1]);
       })
       .then(
         (result) => {
