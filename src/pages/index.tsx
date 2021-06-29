@@ -1,15 +1,13 @@
 import React from "react";
 
-import { Container, Header, Main, Footer, Cards } from "components";
+import { Header, Main } from "components";
 
 const Home: React.FC = () => {
   return (
-    <Container>
+    <React.Fragment>
       <Header />
       <Main />
-      <Cards />
-      <Footer />
-    </Container>
+    </React.Fragment>
   );
 };
 
