@@ -9,6 +9,10 @@ app.use(bodyParser.json());
 app.use(cors());
 dotenv.config();
 
+const headers = {
+  Authorization: `Bearer ${process.env.REACT_APP_YELP_API_KEY}`,
+};
+
 app.post('/getpetadoptions', (req, res) => {
   const params = req.body;
   const url =
@@ -22,9 +26,24 @@ app.post('/getpetadoptions', (req, res) => {
   axios({
     method: 'get',
     url: url,
-    headers: {
-      Authorization: `Bearer ${process.env.REACT_APP_YELP_API_KEY}`,
+    headers,
+  }).then(
+    (result) => {
+      res.send(result.data);
     },
+    (error) => {
+      res.send(error);
+    }
+  );
+});
+
+app.post('/getpetadoptiondetail', (req, res) => {
+  const params = req.body;
+  const url = `https://api.yelp.com/v3/businesses/${params.id}`;
+  axios({
+    method: 'get',
+    url: url,
+    headers,
   }).then(
     (result) => {
       res.send(result.data);

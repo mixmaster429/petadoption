@@ -47,7 +47,11 @@ export const ResultLists: React.FC<Props> = ({ petadoptions, loading, total, fil
           <p className='mb-2 font-bold'>Total: {total}</p>
           {petadoptions.map((item, key) => {
             return (
-              <div key={key} className='md:flex border-2 border-gray-100 shadow-sm p-1 md:p-5 mb-5'>
+              <a
+                key={key}
+                href={'/adoption/' + item.id}
+                className='md:flex border-2 border-gray-100 shadow-sm p-1 md:p-5 mb-5'
+              >
                 <div className='item-image text-center md:text-left'>
                   <img src={item.image_url} alt='' className='object-cover w-40 h-40 inline' />
                 </div>
@@ -67,7 +71,7 @@ export const ResultLists: React.FC<Props> = ({ petadoptions, loading, total, fil
                     />
                     <span className='ml-2'>{item.review_count}</span>
                   </div>
-                  <p className='text-sm text-gray-600'>
+                  <p className='text-sm text-gray-600 mb-2'>
                     {item.categories.map((category, index) => {
                       return (
                         <span key={index}>
@@ -78,18 +82,18 @@ export const ResultLists: React.FC<Props> = ({ petadoptions, loading, total, fil
                     })}
                   </p>
                   <p>
-                    <span className='font-bold'>Address:</span> {item.location.display_address}
+                    <span className='font-bold'>Address:</span>{' '}
+                    {item.location.display_address.join(', ')}
                   </p>
-                  <p
-                    className={
-                      item.is_closed ? 'text-red-900 font-bold' : 'text-green-300 font-bold'
-                    }
-                  >
-                    {item.is_closed ? 'Closed' : 'Open'}
+                  <p>
+                    <span className='font-bold'>Phone:</span> {item.display_phone}
                   </p>
-                  <p className='font-medium'>{item.distance.toFixed(2)} Miles away.</p>
+                  <p>
+                    <span className='font-bold'>Distance:</span> {item.distance.toFixed(2)} Miles
+                    away.
+                  </p>
                 </div>
-              </div>
+              </a>
             );
           })}
         </>

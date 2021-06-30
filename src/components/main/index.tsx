@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import { Banner, ResultLists, Paginate } from 'components';
+import { ResultLists, Paginate } from 'components';
+import { petadoptionServices } from '../../services';
 
 export const Main: React.FC = () => {
   const [petadoptions, setPetadoptions] = useState([]);
@@ -53,27 +54,16 @@ export const Main: React.FC = () => {
       ...geoposition,
       ...filter,
     };
-    const API_URL = 'http://localhost:4000/getpetadoptions';
-    fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify(params),
-      headers: {
-        'Content-Type': 'application/json',
+    petadoptionServices.find_adoptions(params).then(
+      (result) => {
+        if (result.businesses) setPetadoptions(result.businesses);
+        setLoading(false);
+        setTotal(result.total);
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then(
-        (result) => {
-          if (result.businesses) setPetadoptions(result.businesses);
-          setLoading(false);
-          setTotal(result.total);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   // Call api if the filter or location is changed.
@@ -83,10 +73,9 @@ export const Main: React.FC = () => {
 
   return (
     <div>
-      <Banner />
       <div className='container mx-auto'>
-        <div className='grid lg:grid-flow-col gap-4 mx-2'>
-          <div className='col-span-12 lg:col-span-3 px-2'>
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mx-2'>
+          <div className='lg:col-span-1 px-2'>
             <div>
               <label htmlFor='company_website' className='block text-sm font-medium text-gray-700'>
                 Your Location:
@@ -141,7 +130,7 @@ export const Main: React.FC = () => {
             </div>
           </div>
 
-          <div className='col-span-12 lg:col-span-9 px-2'>
+          <div className='lg:col-span-2 px-2'>
             <ResultLists
               petadoptions={petadoptions}
               loading={loading}
