@@ -9,6 +9,7 @@ export const Main: React.FC = () => {
     lat: 0,
     lng: 0,
   });
+  const [loading, setLoading] = useState(false)
 
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -21,6 +22,7 @@ export const Main: React.FC = () => {
   });
 
   const find_adoptions = (geoposition) => {
+    setPetadoptions([]);
     const API_URL = 'http://localhost:4000/getpetadoptions';
     fetch(API_URL, {
       method: 'POST',
@@ -68,7 +70,8 @@ export const Main: React.FC = () => {
         </div>
 
         <div className='col-span-12 lg:col-span-9 px-2'>
-          <svg className='animate-spin h-5 w-5 mr-3 text-pink-900' viewBox='0 0 24 24'></svg>
+          {petadoptions.length === 0 && <p>No results</p>}
+
           {petadoptions.map((item, key) => {
             return (
               <div key={key} className='flex border-2 border-gray-100 shadow-sm p-5 mb-5'>
