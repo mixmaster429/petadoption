@@ -10,8 +10,8 @@ app.use(cors());
 dotenv.config();
 
 app.post('/getpetadoptions', (req, res) => {
-  const location = req.body;
-  const url = `https://api.yelp.com/v3/businesses/search?term=pets&latitude=${location.lat}&longitude=${location.lng}&categories=petadoption`;
+  const params = req.body;
+  const url = `https://api.yelp.com/v3/businesses/search?term=pets&latitude=${params.lat}&longitude=${params.lng}&categories=petadoption&limit=${params.pagecount}&sort_by=${params.sortby}`;
   axios({
     method: 'get',
     url: url,

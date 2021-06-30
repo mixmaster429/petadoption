@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import StarRatings from 'react-star-ratings';
+import { Banner, ResultLists } from 'components';
 
 export const Main: React.FC = () => {
   const [petadoptions, setPetadoptions] = useState([]);
+  const [total, setTotal] = useState(0);
   const [geoposition, setgeoposition] = useState({
     lat: 0,
     lng: 0,
   });
-  // const [loading, setLoading] = useState(false)
+  const [filter, setFilter] = useState({
+    pagecount: 10,
+    sortby: 'best_match',
+  });
+  const [loading, setLoading] = useState(false);
 
+  // Dom object for google plage widget.
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     onPlaceSelected: (place) => {
@@ -21,12 +27,27 @@ export const Main: React.FC = () => {
     },
   });
 
+  // Sort options.
+  const sort_options = {
+    best_match: 'Best Match',
+    rating: 'Rating',
+    review_count: 'Review Count',
+    distance: 'Distance',
+  };
+
+  // function to all yelp api with location and filter options.
   const find_adoptions = (geoposition) => {
     setPetadoptions([]);
+    setLoading(true);
+    const params = {
+      ...geoposition,
+      ...filter,
+    };
+    console.log(params);
     const API_URL = 'http://localhost:4000/getpetadoptions';
     fetch(API_URL, {
       method: 'POST',
-      body: JSON.stringify(geoposition),
+      body: JSON.stringify(params),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -37,6 +58,8 @@ export const Main: React.FC = () => {
       .then(
         (result) => {
           if (result.businesses) setPetadoptions(result.businesses);
+          setLoading(false);
+          setTotal(result.total);
         },
         (error) => {
           console.log(error);
@@ -44,81 +67,81 @@ export const Main: React.FC = () => {
       );
   };
 
+  // Call api if the filter or location is changed.
   useEffect(() => {
     if (geoposition.lat !== 0) find_adoptions(geoposition);
-  }, [geoposition]);
+  }, [geoposition, filter]);
+
+  console.log(filter);
 
   return (
-    <div className='container mx-auto'>
-      <div className='grid lg:grid-flow-col gap-4 mx-2'>
-        <div className='col-span-12 lg:col-span-3 px-2'>
-          <label htmlFor='company_website' className='block text-sm font-medium text-gray-700'>
-            Your Location:
-          </label>
-          <div className='mt-1 flex rounded-md shadow-sm'>
-            <span className='inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm'>
-              <LocationMarkerIcon className='h-5 w-5 text-black-500' />
-            </span>
-            <input
-              ref={ref}
-              type='text'
-              name='company_website'
-              id='company_website'
-              className='focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300'
+    <div>
+      <Banner />
+      <div className='container mx-auto'>
+        <div className='grid lg:grid-flow-col gap-4 mx-2'>
+          <div className='col-span-12 lg:col-span-3 px-2'>
+            <div>
+              <label htmlFor='company_website' className='block text-sm font-medium text-gray-700'>
+                Your Location:
+              </label>
+              <div className='mt-1 flex rounded-md shadow-sm'>
+                <span className='inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm'>
+                  <LocationMarkerIcon className='h-5 w-5 text-black-500' />
+                </span>
+                <input
+                  ref={ref}
+                  type='text'
+                  name='company_website'
+                  id='company_website'
+                  className='focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300'
+                />
+              </div>
+              <div className='divider'></div>
+              <div>
+                <label htmlFor='sortby' className='block text-sm font-medium text-gray-700'>
+                  Sort By:
+                </label>
+                <select
+                  id='sortby'
+                  name='sortby'
+                  className='mb-3 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                  value={filter.sortby}
+                  onChange={(e) => setFilter({ ...filter, sortby: e.target.value })}
+                >
+                  {Object.keys(sort_options).map((option, key) => {
+                    return (
+                      <option key={key} value={option}>
+                        {sort_options[option]}
+                      </option>
+                    );
+                  })}
+                </select>
+
+                <label htmlFor='itemcount' className='block text-sm font-medium text-gray-700'>
+                  Items per page:
+                </label>
+                <select
+                  id='itemcount'
+                  name='itemcount'
+                  className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                  value={filter.pagecount}
+                  onChange={(e) => setFilter({ ...filter, pagecount: Number(e.target.value) })}
+                >
+                  <option value='10'>10</option>
+                  <option value='20'>20</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className='col-span-12 lg:col-span-9 px-2'>
+            <ResultLists
+              petadoptions={petadoptions}
+              loading={loading}
+              total={total}
+              filter={filter}
             />
           </div>
-        </div>
-
-        <div className='col-span-12 lg:col-span-9 px-2'>
-          {petadoptions.length === 0 && <p>No results</p>}
-
-          {petadoptions.map((item, key) => {
-            return (
-              <div key={key} className='flex border-2 border-gray-100 shadow-sm p-5 mb-5'>
-                <div className='item-image'>
-                  <img src={item.image_url} alt='' className='object-cover w-40 h-40' />
-                </div>
-
-                <div className='item-details ml-5'>
-                  <p className='text-lg font-bold'>
-                    {key + 1}. {item.name}
-                  </p>
-                  <div className='flex items-center'>
-                    <StarRatings
-                      rating={item.rating}
-                      starDimension='20px'
-                      starRatedColor='#ff0254'
-                      numberOfStars={5}
-                      name='rating'
-                      starSpacing='1px'
-                    />
-                    <span className='ml-2'>{item.review_count}</span>
-                  </div>
-                  <p className='text-sm text-gray-600'>
-                    {item.categories.map((category, index) => {
-                      return (
-                        <span key={index}>
-                          {category.title}
-                          {index === item.categories.length - 1 ? '' : ', '}
-                        </span>
-                      );
-                    })}
-                  </p>
-                  <p>
-                    <span className='font-bold'>Address:</span> {item.location.display_address}
-                  </p>
-                  <p
-                    className={
-                      item.is_closed ? 'text-red-900 font-bold' : 'text-green-300 font-bold'
-                    }
-                  >
-                    {item.is_closed ? 'Closed' : 'Open'}
-                  </p>
-                  <p className='font-medium'>{item.distance.toFixed(2)} Miles away.</p>
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
     </div>

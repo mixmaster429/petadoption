@@ -5,3 +5,17 @@
 .star-ratings {
   display: flex !important;
 }
+
+.banner {
+  height: 400px;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.divider {
+  margin: 10px 0;
+  border-bottom: 1px solid lightgray;
+  height: 1px;
+}
