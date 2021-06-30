@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import { Banner, ResultLists } from 'components';
+import { Banner, ResultLists, Paginate } from 'components';
 
 export const Main: React.FC = () => {
   const [petadoptions, setPetadoptions] = useState([]);
@@ -13,6 +13,7 @@ export const Main: React.FC = () => {
   const [filter, setFilter] = useState({
     pagecount: 10,
     sortby: 'best_match',
+    page: 1,
   });
   const [loading, setLoading] = useState(false);
 
@@ -35,15 +36,23 @@ export const Main: React.FC = () => {
     distance: 'Distance',
   };
 
+  const setpage = (page) => {
+    console.log(page);
+    setFilter({
+      ...filter,
+      page: page,
+    });
+  };
+
   // function to all yelp api with location and filter options.
   const find_adoptions = (geoposition) => {
     setPetadoptions([]);
     setLoading(true);
+    setTotal(0);
     const params = {
       ...geoposition,
       ...filter,
     };
-    console.log(params);
     const API_URL = 'http://localhost:4000/getpetadoptions';
     fetch(API_URL, {
       method: 'POST',
@@ -71,8 +80,6 @@ export const Main: React.FC = () => {
   useEffect(() => {
     if (geoposition.lat !== 0) find_adoptions(geoposition);
   }, [geoposition, filter]);
-
-  console.log(filter);
 
   return (
     <div>
@@ -141,6 +148,8 @@ export const Main: React.FC = () => {
               total={total}
               filter={filter}
             />
+
+            <Paginate total={total} filter={filter} setpage={setpage} />
           </div>
         </div>
       </div>

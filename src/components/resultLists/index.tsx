@@ -44,17 +44,17 @@ export const ResultLists: React.FC<Props> = ({ petadoptions, loading, total, fil
         <p className='text-center text-xl font-bold mt-5'>No results</p>
       ) : (
         <>
-          <p className='mb-2'>Total: {total}</p>
+          <p className='mb-2 font-bold'>Total: {total}</p>
           {petadoptions.map((item, key) => {
             return (
-              <div key={key} className='flex border-2 border-gray-100 shadow-sm p-5 mb-5'>
-                <div className='item-image'>
-                  <img src={item.image_url} alt='' className='object-cover w-40 h-40' />
+              <div key={key} className='md:flex border-2 border-gray-100 shadow-sm p-1 md:p-5 mb-5'>
+                <div className='item-image text-center md:text-left'>
+                  <img src={item.image_url} alt='' className='object-cover w-40 h-40 inline' />
                 </div>
 
                 <div className='item-details ml-5'>
                   <p className='text-lg font-bold'>
-                    {key + 1}. {item.name}
+                    {filter.pagecount * (filter.page - 1) + key + 1}. {item.name}
                   </p>
                   <div className='flex items-center'>
                     <StarRatings
