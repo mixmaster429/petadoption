@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { usePlacesWidget } from 'react-google-autocomplete';
+import StarRatings from 'react-star-ratings';
 
 export const Main: React.FC = () => {
   const [petadoptions, setPetadoptions] = useState([]);
@@ -10,7 +11,7 @@ export const Main: React.FC = () => {
   });
 
   const { ref } = usePlacesWidget({
-    apiKey: 'AIzaSyAs_LAuZVVqNTEdv765oUp6arI5Tjxs43s',
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     onPlaceSelected: (place) => {
       setgeoposition({
         lat: place.geometry.location.lat(),
@@ -20,22 +21,20 @@ export const Main: React.FC = () => {
   });
 
   const find_adoptions = (geoposition) => {
-    const API_URL = `https://api.yelp.com/v3/businesses/search?term=pets&latitude=${geoposition.lat}&longitude=${geoposition.lng}&categories=petadoption`;
+    const API_URL = 'http://localhost:4000/getpetadoptions';
     fetch(API_URL, {
-      method: 'get',
+      method: 'POST',
+      body: JSON.stringify(geoposition),
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        authorization:
-          'Bearer RQmAJ375vK7UhAZ6NIeNRziREj9DGsKVr2_9E2rcrIQ-jHsjuGx09I7ObLjcRfhh_PH6ynVzv22Ac5tk9DIJDVOGCz5VgAYo_z7BpgzNMBhaoX1pa7tA2EnPXx3WYHYx',
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => {
-        console.log('res: ', res);
-        setPetadoptions([1]);
+        return res.json();
       })
       .then(
         (result) => {
-          console.log('result: ', result);
+          if (result.businesses) setPetadoptions(result.businesses);
         },
         (error) => {
           console.log(error);
@@ -49,8 +48,8 @@ export const Main: React.FC = () => {
 
   return (
     <div className='container mx-auto'>
-      <div className='grid grid-flow-col gap-4'>
-        <div className='col-span-3 px-10'>
+      <div className='grid lg:grid-flow-col gap-4 mx-2'>
+        <div className='col-span-12 lg:col-span-3 px-2'>
           <label htmlFor='company_website' className='block text-sm font-medium text-gray-700'>
             Your Location:
           </label>
@@ -68,9 +67,54 @@ export const Main: React.FC = () => {
           </div>
         </div>
 
-        <div className='col-span-9'>
+        <div className='col-span-12 lg:col-span-9 px-2'>
+          <svg className='animate-spin h-5 w-5 mr-3 text-pink-900' viewBox='0 0 24 24'></svg>
           {petadoptions.map((item, key) => {
-            return <div key={key}>aaa</div>;
+            return (
+              <div key={key} className='flex border-2 border-gray-100 shadow-sm p-5 mb-5'>
+                <div className='item-image'>
+                  <img src={item.image_url} alt='' className='object-cover w-40 h-40' />
+                </div>
+
+                <div className='item-details ml-5'>
+                  <p className='text-lg font-bold'>
+                    {key + 1}. {item.name}
+                  </p>
+                  <div className='flex items-center'>
+                    <StarRatings
+                      rating={item.rating}
+                      starDimension='20px'
+                      starRatedColor='#ff0254'
+                      numberOfStars={5}
+                      name='rating'
+                      starSpacing='1px'
+                    />
+                    <span className='ml-2'>{item.review_count}</span>
+                  </div>
+                  <p className='text-sm text-gray-600'>
+                    {item.categories.map((category, index) => {
+                      return (
+                        <span key={index}>
+                          {category.title}
+                          {index === item.categories.length - 1 ? '' : ', '}
+                        </span>
+                      );
+                    })}
+                  </p>
+                  <p>
+                    <span className='font-bold'>Address:</span> {item.location.display_address}
+                  </p>
+                  <p
+                    className={
+                      item.is_closed ? 'text-red-900 font-bold' : 'text-green-300 font-bold'
+                    }
+                  >
+                    {item.is_closed ? 'Closed' : 'Open'}
+                  </p>
+                  <p className='font-medium'>{item.distance.toFixed(2)} Miles away.</p>
+                </div>
+              </div>
+            );
           })}
         </div>
       </div>
