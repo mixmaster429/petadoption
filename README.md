@@ -1,83 +1,34 @@
 # yelp-pet
 
-This project was generated with [superplate](https://github.com/pankod/superplate).
+## What's included
 
-## API
+Tailwind CSS
+React Typescript
+React Google Map
+React Star Rating
+React Slick Slider
 
-best_match, rating, review_count or distance
+Node(express) backend  -  src/server/index.js
 
-## Getting Started
+## How to run
 
-superplate is a Next.js all-in-one project generator. Create your project with the tools you need without spending hours on setting them up.
+npm start
 
-## Available Scripts
+Go to http://localhost:3000
 
-### Running the development server.
+## Project structure
 
-```bash
-    npm run dev
-```
+### Homepage
+src/page/index.tsx
 
-### Building for production.
+#### Header Component
+src/header/index.tsx
 
-```bash
-    npm run build
-```
+### Detail page
+src/page/adoption.tsx
 
-### Running the production server.
+#### Map & hours Component
+src/map/index.tsx
 
-```bash
-    npm run start
-```
-
-## Learn More
-
-To learn more about **superplate**, please check out the [Documentation](https://github.com/pankod/superplate).
-
-### **TailwindCSS**
-
-A utility-first CSS framework packed with classes like flex, pt-4, text-center and rotate-90 that can be composed to build any design, directly in your markup.
-
-[Go To Documentation](https://tailwindcss.com/docs)
-
-### **SASS/SCSS**
-
-Sass is a stylesheet language that’s compiled to CSS. It allows you to use variables, nested rules, mixins, functions, and more, all with a fully CSS-compatible syntax.
-
-[Go To Documentation](https://sass-lang.com/documentation)
-
-### **Fetch**
-
-The global fetch function allows you to make AJAX requests. It takes in a URL as an input and returns a Promise that resolves to a Response object.
-
-[Go To Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-
-### **Axios**
-
-Promise based HTTP client for the browser and node.js.
-
-[Go To Documentation](https://github.com/axios/axios)
-
-### **Environment Variables**
-
-Use environment variables in your react project for server side, client or both.
-
-[Go To Documentation](https://create-react-app.dev/docs/adding-custom-environment-variables/)
-
-### **React Redux**
-
-Redux helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test.
-
-[Go To Documentation](https://redux.js.org/introduction/getting-started)
-
-### **eslint**
-
-[Go To Documentation]()
-
-### **jest**
-
-[Go To Documentation]()
-
-## License
-
-MIT
+#### Review Component
+src/review/index.tsx

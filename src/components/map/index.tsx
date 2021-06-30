@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const MapHours: React.FC<Props> = ({ adoptionData }) => {
-  const day_array = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const day_array = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
 
   const mapprops = {
     center: {
@@ -33,25 +33,27 @@ export const MapHours: React.FC<Props> = ({ adoptionData }) => {
           </div>
         </div>
         <div className='lg:col-span-1'>
-          <table className='font-medium text-gray-500'>
-            <tbody>
-              {adoptionData.hours[0].open.map((item, index) => {
-                return (
-                  <tr
-                    key={index}
-                    className={index === new Date().getDay() ? 'font-bold text-black' : ''}
-                  >
-                    <td className='px-3'>{day_array[item.day]}</td>
-                    <td className='px-3'>
-                      {item.start.match(/.{1,2}/g).join(' : ')} -{' '}
-                      {item.end.match(/.{1,2}/g).join(' : ')}
-                    </td>
-                    <td>{index === new Date().getDay() && <>Open now </>}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          {adoptionData.hours && (
+            <table className='font-medium text-gray-500'>
+              <tbody>
+                {adoptionData.hours[0].open.map((item, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      className={index === new Date().getDay() ? 'font-bold text-black' : ''}
+                    >
+                      <td className='px-3'>{day_array[item.day]}</td>
+                      <td className='px-3'>
+                        {item.start.match(/.{1,2}/g).join(' : ')} -{' '}
+                        {item.end.match(/.{1,2}/g).join(' : ')}
+                      </td>
+                      <td>{index === new Date().getDay() && <>Open now </>}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </>

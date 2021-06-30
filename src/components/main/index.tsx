@@ -26,6 +26,11 @@ export const Main: React.FC = () => {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
       });
+      setFilter({
+        pagecount: 10,
+        sortby: 'best_match',
+        page: 1,
+      });
     },
   });
 

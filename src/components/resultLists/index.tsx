@@ -51,6 +51,8 @@ export const ResultLists: React.FC<Props> = ({ petadoptions, loading, total, fil
                 key={key}
                 href={'/adoption/' + item.id}
                 className='md:flex border-2 border-gray-100 shadow-sm p-1 md:p-5 mb-5'
+                target='_blank'
+                rel='noreferrer'
               >
                 <div className='item-image text-center md:text-left'>
                   <img src={item.image_url} alt='' className='object-cover w-40 h-40 inline' />

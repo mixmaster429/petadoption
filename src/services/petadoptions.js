@@ -1,3 +1,4 @@
+// Find adoption service
 const find_adoptions = async (params) => {
   const API_URL = 'http://localhost:4000/getpetadoptions';
   const res = await fetch(API_URL, {
@@ -11,6 +12,7 @@ const find_adoptions = async (params) => {
   return result;
 };
 
+// Get adoption detail service
 const getdetails = async (id) => {
   const API_URL = 'http://localhost:4000/getpetadoptiondetail';
   const res = await fetch(API_URL, {
@@ -24,6 +26,7 @@ const getdetails = async (id) => {
   return result;
 };
 
+// Get adoption reviews service
 const getreviews = async (id) => {
   const API_URL = 'http://localhost:4000/getreviews';
   const res = await fetch(API_URL, {
