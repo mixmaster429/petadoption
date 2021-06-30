@@ -38,7 +38,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "start": "concurrently \"nodemon src/server/index.js\" \"craco start\""
+    "start": "concurrently \"node src/server/index.js\" \"craco start\""
   },
   "eslintConfig": {
     "extends": [
