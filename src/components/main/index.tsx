@@ -9,7 +9,7 @@ export const Main: React.FC = () => {
     lat: 0,
     lng: 0,
   });
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
 
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
