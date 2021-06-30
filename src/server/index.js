@@ -54,6 +54,24 @@ app.post('/getpetadoptiondetail', (req, res) => {
   );
 });
 
+
+app.post('/getreviews', (req, res) => {
+  const params = req.body;
+  const url = `https://api.yelp.com/v3/businesses/${params.id}/reviews`;
+  axios({
+    method: 'get',
+    url: url,
+    headers,
+  }).then(
+    (result) => {
+      res.send(result.data);
+    },
+    (error) => {
+      res.send(error);
+    }
+  );
+});
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });

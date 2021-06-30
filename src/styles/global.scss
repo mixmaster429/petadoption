@@ -19,3 +19,17 @@
   border-bottom: 1px solid lightgray;
   height: 1px;
 }
+
+.slick-slide *:focus-visible {
+  outline: none;
+}
+
+.slick-dots {
+  position: relative;
+  bottom: unset;
+
+  li {
+    width: 50px;
+    height: auto;
+  }
+}
