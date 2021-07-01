@@ -19,6 +19,13 @@ Go to http://localhost:3000
 ## Project structure
 
 ### Homepage
+Project config.
+.env
+
+REACT_APP_YELP_API_KEY='Yelp api key'
+REACT_APP_GOOGLE_API_KEY="Google map key"
+
+### Homepage
 src/page/index.tsx
 
 #### Header Component
